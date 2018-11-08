@@ -72,9 +72,12 @@ class TicketApp(QWidget):
             self.finish_time.setText(self.get_current_time())
 
     def next_ticket_btn(self):
-        data = self.get_data_from_fields()
-        self.clear_fields()
-        self.save_to_file(data)
+        if not self.check_if_any_fields_are_empty():
+            data = self.get_data_from_fields()
+            self.clear_fields()
+            self.save_to_file(data)
+        else:
+            pass
 
     def date_stamp_btn(self):
         now = datetime.datetime.now()
