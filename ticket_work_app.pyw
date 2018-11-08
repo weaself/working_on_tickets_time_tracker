@@ -3,6 +3,7 @@ import sys, os, time, datetime
 from PyQt5.QtWidgets import QLineEdit, QFileDialog, QTextEdit, QWidget, QVBoxLayout, \
     QApplication, QPushButton, QLabel, QHBoxLayout, QCheckBox, QRadioButton, QComboBox, QMainWindow
 from PyQt5.QtCore import Qt
+from PyQt5 import QtGui
 
 
 class TicketApp(QWidget):
@@ -21,7 +22,7 @@ class TicketApp(QWidget):
         self.record_start_time = QPushButton('Start Time')
         self.record_finish_time = QPushButton('End Time')
         self.next_ticket = QPushButton('Next')
-        self.save_and_finish_day = QPushButton('Finish day')
+        self.save_and_finish_day = QPushButton('Date Stamp')
 
         self.setMinimumSize(200, 150)
         self.setMaximumSize(200, 150)
@@ -54,7 +55,7 @@ class TicketApp(QWidget):
         self.record_start_time.clicked.connect(self.start_btn)
         self.record_finish_time.clicked.connect(self.finish_btn)
         self.next_ticket.clicked.connect(self.next_ticket_btn)
-        self.save_and_finish_day.clicked.connect(self.finish_day_btn)
+        self.save_and_finish_day.clicked.connect(self.date_stamp_btn)
 
         self.setLayout(self.v_layout_overall)
 
@@ -72,9 +73,10 @@ class TicketApp(QWidget):
 
     def next_ticket_btn(self):
         data = self.get_data_from_fields()
+        self.clear_fields()
         self.save_to_file(data)
 
-    def finish_day_btn(self):
+    def date_stamp_btn(self):
         now = datetime.datetime.now()
         self.save_to_file('\n' + str(now) + '\n')
 
@@ -86,6 +88,11 @@ class TicketApp(QWidget):
     def get_current_time(self):
         time_formatted = time.strftime("%H:%M")
         return time_formatted
+
+    def clear_fields(self):
+        self.name_of_ticket.setText('')
+        self.start_time.setText('')
+        self.finish_time.setText('')
 
     def get_data_from_fields(self):
         line_with_data = ''
@@ -100,5 +107,6 @@ class TicketApp(QWidget):
 
 
 app = QApplication(sys.argv)
+app.setWindowIcon(QtGui.QIcon('desktop-icon.png'))
 a_window = TicketApp()
 sys.exit(app.exec_())
